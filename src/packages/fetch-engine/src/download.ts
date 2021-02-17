@@ -14,13 +14,11 @@ import tempDir from 'temp-dir'
 import { getBar } from './log'
 import plusxSync from './chmod'
 import { copy } from './copy'
-import { getPlatform, Platform, platforms, getos } from '@prisma/get-platform'
+import { getPlatform, Platform, platforms, getos,  getNapiName, NAPI_QUERY_ENGINE_FS_BASE } from '@prisma/get-platform'
 import { downloadZip } from './downloadZip'
 import {
   getCacheDir,
-  getDownloadUrl,
-  getNapiName,
-  NAPI_QUERY_ENGINE_BASE,
+  getDownloadUrl
 } from './util'
 import { cleanupCache } from './cleanupCache'
 import { flatMap } from './flatMap'
@@ -35,7 +33,7 @@ const readFile = promisify(fs.readFile)
 const channel = 'master'
 export interface BinaryDownloadConfiguration {
   'query-engine'?: string
-  'libquery_engine_napi'?: string
+  'libquery-engine-napi'?: string
   'migration-engine'?: string
   'introspection-engine'?: string
   'prisma-fmt'?: string
@@ -339,8 +337,8 @@ export async function checkVersionCommand(
 }
 
 export function getBinaryName(binaryName: string, platform: Platform): string {
-  if (binaryName === NAPI_QUERY_ENGINE_BASE) {
-    return `${getNapiName(platform, 'fs')}`
+  if (binaryName === NAPI_QUERY_ENGINE_FS_BASE) {
+    return `${getNapiName(platform, 'url')}`
   }
   const extension = platform === 'windows' ? '.exe' : ''
   return `${binaryName}-${platform}${extension}`
